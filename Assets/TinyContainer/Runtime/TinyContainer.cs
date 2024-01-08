@@ -88,13 +88,13 @@ namespace Jnk.TinyContainer
         }
 
         /// <summary>
-        /// Returns the <see cref="TinyContainer"/> configured for the scene of the MonoBehaviour. Falls back to the global instance.
+        /// Returns the <see cref="TinyContainer"/> configured for the scene of the Component. Falls back to the global instance.
         /// </summary>
-        public static TinyContainer ForSceneOf(MonoBehaviour monoBehaviour)
+        public static TinyContainer ForSceneOf(Component component)
         {
-            Scene scene = monoBehaviour.gameObject.scene;
+            Scene scene = component.gameObject.scene;
 
-            if (_sceneContainers.TryGetValue(scene, out TinyContainer container) && container != monoBehaviour)
+            if (_sceneContainers.TryGetValue(scene, out TinyContainer container) && container != component)
                 return container;
 
             _temporarySceneGameObjects.Clear();
@@ -105,7 +105,7 @@ namespace Jnk.TinyContainer
                 if (go.TryGetComponent(out TinyContainerScene sceneContainer) == false)
                     continue;
 
-                if (sceneContainer.Container == monoBehaviour)
+                if (sceneContainer.Container == component)
                     continue;
 
                 sceneContainer.BootstrapOnDemand();
@@ -118,11 +118,11 @@ namespace Jnk.TinyContainer
         /// <summary>
         /// Returns the closest <see cref="TinyContainer"/> upwards in the hierarchy. Falls back to the scene container, then to the global instance.
         /// </summary>
-        public static TinyContainer For(MonoBehaviour monoBehaviour)
+        public static TinyContainer For(Component component)
         {
-            return monoBehaviour.GetComponentInParent<TinyContainer>().IsNull() ?? ForSceneOf(monoBehaviour) ?? Global;
+            return component.GetComponentInParent<TinyContainer>().IsNull() ?? ForSceneOf(component) ?? Global;
         }
-
+        
         /// <summary>
         /// Register the instance with the container.
         /// </summary>
