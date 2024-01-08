@@ -16,6 +16,20 @@ namespace Jnk.TinyContainer
         private static Dictionary<Scene, TinyContainer> _sceneContainers;
         private static List<GameObject> _temporarySceneGameObjects;
 
+        public static TinyContainer ByLevel(ContainerLevel level, Component obj)
+        {
+            switch (level)
+            {
+                case ContainerLevel.Global:
+                    return Global;
+                case ContainerLevel.Scene:
+                    return ForSceneOf(obj);
+                case ContainerLevel.Local:
+                default:
+                    return For(obj);                            
+            }
+        }
+        
         /// <summary>
         /// The global container instance.
         /// </summary>

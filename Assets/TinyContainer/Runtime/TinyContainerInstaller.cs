@@ -3,13 +3,6 @@ using UnityEngine;
 
 namespace Jnk.TinyContainer
 {
-    public enum ContainerLevel
-    {
-        Global,
-        Scene,
-        Local
-    }
-    
     [DefaultExecutionOrder(ExecutionOrder.EXECUTION_ORDER_INSTALLER)]
     [AddComponentMenu("TinyContainer/TinyContainer Object Installer")]
     public class TinyContainerInstaller : MonoBehaviour
@@ -21,24 +14,10 @@ namespace Jnk.TinyContainer
 
         protected void Awake()
         {
-            var container = GetContainer();
+            var container = TinyContainer.ByLevel(_level, this);
 
             foreach (var obj in objects)
                 container.Register(obj.GetType(), obj);
-        }
-
-        private TinyContainer GetContainer()
-        {
-            switch (_level)
-            {
-                case ContainerLevel.Global:
-                    return TinyContainer.Global;
-                case ContainerLevel.Scene:
-                    return TinyContainer.ForSceneOf(this);
-                case ContainerLevel.Local:
-                default:
-                    return TinyContainer.For(this);                            
-            }
         }
     }
 }
