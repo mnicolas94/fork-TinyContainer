@@ -2,6 +2,7 @@
 
 namespace Jnk.TinyContainer
 {
+    [DefaultExecutionOrder(ExecutionOrder.EXECUTION_ORDER_BOOTSTRAPPER)]
     [AddComponentMenu("TinyContainer/TinyContainer Scene")]
     public class TinyContainerScene : TinyContainerBootstrapperBase
     {

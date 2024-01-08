@@ -7,6 +7,7 @@ using Scene = UnityEngine.SceneManagement.Scene;
 
 namespace Jnk.TinyContainer
 {
+    [DefaultExecutionOrder(ExecutionOrder.EXECUTION_ORDER_CONTAINER)]
     [DisallowMultipleComponent]
     [AddComponentMenu("TinyContainer/TinyContainer")]
     public class TinyContainer : MonoBehaviour

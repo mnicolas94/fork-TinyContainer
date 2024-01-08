@@ -10,6 +10,7 @@ namespace Jnk.TinyContainer
         Local
     }
     
+    [DefaultExecutionOrder(ExecutionOrder.EXECUTION_ORDER_INSTALLER)]
     [AddComponentMenu("TinyContainer/TinyContainer Object Installer")]
     public class TinyContainerInstaller : MonoBehaviour
     {

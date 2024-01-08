@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Jnk.TinyContainer
 {
+    [DefaultExecutionOrder(ExecutionOrder.EXECUTION_ORDER_INSTALLER)]
     [AddComponentMenu("TinyContainer/TinyContainer Object Installer")]
     public class TinyContainerObjectInstaller : MonoBehaviour
     {

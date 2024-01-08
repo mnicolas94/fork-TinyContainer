@@ -2,6 +2,7 @@
 
 namespace Jnk.TinyContainer
 {
+    [DefaultExecutionOrder(ExecutionOrder.EXECUTION_ORDER_BOOTSTRAPPER)]
     [AddComponentMenu("TinyContainer/TinyContainer Global")]
     public class TinyContainerGlobal : TinyContainerBootstrapperBase
     {
