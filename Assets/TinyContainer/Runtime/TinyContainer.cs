@@ -133,9 +133,9 @@ namespace Jnk.TinyContainer
         /// <summary>
         /// Returns the closest <see cref="TinyContainer"/> upwards in the hierarchy. Falls back to the scene container, then to the global instance.
         /// </summary>
-        public static TinyContainer For(Component component)
+        public static TinyContainer For(Component component, bool includeInactive = true)
         {
-            return component.GetComponentInParent<TinyContainer>().IsNull() ?? ForSceneOf(component) ?? Global;
+            return component.GetComponentInParent<TinyContainer>(includeInactive).IsNull() ?? ForSceneOf(component) ?? Global;
         }
         
         /// <summary>
