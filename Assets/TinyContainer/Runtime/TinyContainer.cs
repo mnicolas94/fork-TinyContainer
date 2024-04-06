@@ -155,7 +155,7 @@ namespace Jnk.TinyContainer
             if (type.IsInstanceOfType(instance) == false)
                 throw new ArgumentException("Type of instance does not match.", nameof(instance));
 
-            if (IsNotRegistered(type) || force)
+            if (force || IsNotRegistered(type))
                 _instances[type] = instance;
 
             return this;
