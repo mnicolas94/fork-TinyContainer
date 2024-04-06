@@ -141,25 +141,21 @@ namespace Jnk.TinyContainer
         /// <summary>
         /// Register the instance with the container.
         /// </summary>
-        public TinyContainer Register<T>(T instance)
+        public TinyContainer Register<T>(T instance, bool force = false)
         {
             Type type = typeof(T);
-
-            if (IsNotRegistered(type))
-                _instances[type] = instance;
-
-            return this;
+            return Register(type, instance, force);
         }
 
         /// <summary>
         /// Register the instance with the container.
         /// </summary>
-        public TinyContainer Register(Type type, object instance)
+        public TinyContainer Register(Type type, object instance, bool force = false)
         {
             if (type.IsInstanceOfType(instance) == false)
                 throw new ArgumentException("Type of instance does not match.", nameof(instance));
 
-            if (IsNotRegistered(type))
+            if (IsNotRegistered(type) || force)
                 _instances[type] = instance;
 
             return this;
@@ -184,6 +180,12 @@ namespace Jnk.TinyContainer
             _factories[type] = factoryMethod;
 
             return this;
+        }
+
+        public void Deregister(Type type)
+        {
+            _instances.Remove(type);
+            _factories.Remove(type);
         }
 
         private bool IsNotRegistered(Type type)
