@@ -2,6 +2,7 @@
 
 namespace Jnk.TinyContainer
 {
+    [DefaultExecutionOrder(ExecutionOrder.EXECUTION_ORDER_BOOTSTRAPPER)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(TinyContainer))]
     public abstract class TinyContainerBootstrapperBase : MonoBehaviour
