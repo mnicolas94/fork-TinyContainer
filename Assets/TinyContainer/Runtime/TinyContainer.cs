@@ -47,7 +47,9 @@ namespace Jnk.TinyContainer
                 }
 
                 var container = new GameObject("TinyContainer [Global]", typeof(TinyContainer));
-                container.AddComponent<TinyContainerGlobal>().BootstrapOnDemand();
+                var tinyContainerGlobal = container.AddComponent<TinyContainerGlobal>();
+                tinyContainerGlobal.DoNotDestroyOnLoad = true;
+                tinyContainerGlobal.BootstrapOnDemand();
 
                 return _global;
             }

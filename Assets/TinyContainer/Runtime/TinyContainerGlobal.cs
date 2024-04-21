@@ -8,6 +8,11 @@ namespace Jnk.TinyContainer
     {
         [SerializeField]
         private bool dontDestroyOnLoad;
+        public bool DoNotDestroyOnLoad
+        {
+            get => dontDestroyOnLoad;
+            set => dontDestroyOnLoad = value;
+        }
 
         protected override void Bootstrap()
         {
