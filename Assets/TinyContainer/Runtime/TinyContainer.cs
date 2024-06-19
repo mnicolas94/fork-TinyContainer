@@ -47,12 +47,7 @@ namespace Jnk.TinyContainer
                 }
 
                 var container = new GameObject("TinyContainer [Global]", typeof(TinyContainer));
-                var tinyContainerGlobal = container.AddComponent<TinyContainerGlobal>();
-                // // adding the TinyContainerGlobal component will call its Awake method, and hence, its
-                // // BootstrapOnDemand. This will set 
-                // _global = null;
-                // tinyContainerGlobal.DoNotDestroyOnLoad = true;
-                // tinyContainerGlobal.BootstrapOnDemand();
+                container.AddComponent<TinyContainerGlobal>();
 
                 return _global;
             }
@@ -66,7 +61,7 @@ namespace Jnk.TinyContainer
         private readonly Dictionary<Type, object> _instances = new Dictionary<Type, object>();
         private readonly Dictionary<Type, Func<TinyContainer, object>> _factories = new Dictionary<Type, Func<TinyContainer, object>>();
 
-        private Dictionary<Type, List<object>> _onChangeInstanceCallbacks;
+        private readonly Dictionary<Type, List<object>> _onChangeInstanceCallbacks = new();
         
         public EventFunction EnabledEventFunctions
         {
@@ -315,6 +310,7 @@ namespace Jnk.TinyContainer
             if (!_onChangeInstanceCallbacks.TryGetValue(type, out var actions))
             {
                 actions = new List<object>();
+                actions.Add(onChange);
                 _onChangeInstanceCallbacks.Add(type, actions);
             }
             
