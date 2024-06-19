@@ -7,7 +7,7 @@ namespace Jnk.TinyContainer
     public class TinyContainerGlobal : TinyContainerBootstrapperBase
     {
         [SerializeField]
-        private bool dontDestroyOnLoad;
+        private bool dontDestroyOnLoad = true;
         public bool DoNotDestroyOnLoad
         {
             get => dontDestroyOnLoad;

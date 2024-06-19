@@ -48,8 +48,11 @@ namespace Jnk.TinyContainer
 
                 var container = new GameObject("TinyContainer [Global]", typeof(TinyContainer));
                 var tinyContainerGlobal = container.AddComponent<TinyContainerGlobal>();
-                tinyContainerGlobal.DoNotDestroyOnLoad = true;
-                tinyContainerGlobal.BootstrapOnDemand();
+                // // adding the TinyContainerGlobal component will call its Awake method, and hence, its
+                // // BootstrapOnDemand. This will set 
+                // _global = null;
+                // tinyContainerGlobal.DoNotDestroyOnLoad = true;
+                // tinyContainerGlobal.BootstrapOnDemand();
 
                 return _global;
             }
@@ -63,6 +66,8 @@ namespace Jnk.TinyContainer
         private readonly Dictionary<Type, object> _instances = new Dictionary<Type, object>();
         private readonly Dictionary<Type, Func<TinyContainer, object>> _factories = new Dictionary<Type, Func<TinyContainer, object>>();
 
+        private Dictionary<Type, List<object>> _onChangeInstanceCallbacks;
+        
         public EventFunction EnabledEventFunctions
         {
             get => enabledEventFunctions;
@@ -158,7 +163,10 @@ namespace Jnk.TinyContainer
                 throw new ArgumentException("Type of instance does not match.", nameof(instance));
 
             if (force || IsNotRegistered(type))
+            {
                 _instances[type] = instance;
+                InvokeInstanceChangeCallbacks(instance);
+            }
 
             return this;
         }
@@ -289,6 +297,43 @@ namespace Jnk.TinyContainer
             return true;
         }
 
+        private void InvokeInstanceChangeCallbacks<T>(T instance)
+        {
+            var type = typeof(T);
+            if (_onChangeInstanceCallbacks.TryGetValue(type, out var actions))
+            {
+                foreach (Action<T> action in actions)
+                {
+                    action?.Invoke(instance);
+                }
+            }
+        }
+        
+        public void SubscribeToChange<T>(Action<T> onChange)
+        {
+            var type = typeof(T);
+            if (!_onChangeInstanceCallbacks.TryGetValue(type, out var actions))
+            {
+                actions = new List<object>();
+                _onChangeInstanceCallbacks.Add(type, actions);
+            }
+            
+            actions.Add(onChange);
+        }
+        
+        public void UnsubscribeToChange<T>(Action<T> onChange)
+        {
+            var type = typeof(T);
+            if (_onChangeInstanceCallbacks.TryGetValue(type, out var actions))
+            {
+                actions.Remove(onChange);
+                if (actions.Count == 0)
+                {
+                    _onChangeInstanceCallbacks.Remove(type);
+                }
+            }
+        }
+
         private void FixedUpdate()
         {
             if (!enabledEventFunctions.HasFlag(EventFunction.FixedUpdate))
@@ -297,7 +342,7 @@ namespace Jnk.TinyContainer
             foreach (object instance in _instances.Values)
                 (instance as IFixedUpdateHandler)?.FixedUpdate();
         }
-
+        
         private void Update()
         {
             if (!enabledEventFunctions.HasFlag(EventFunction.Update))
